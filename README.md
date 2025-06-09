@@ -44,6 +44,7 @@ Link: https://www.kaggle.com/datasets/shivamb/netflix-shows/data
   **1.¿Qué títulos fueron lanzados antes del año 2000?** Para responder esto se necesita seleccionar (SELECT) las columnas title y release_year, que tienen el nombre del título y el año en que fue lanzado. Luego     indicar de qué tabla se obtendrá esta información utilizando FROM “nombre tabla”. Y, por último aplicar una condición con WHERE para filtrar los resultados y mostrar solo los que en release_year sea menor al      año 2000
 
   *Respuesta:*
+
   SELECT title, release_year
   FROM “nombre tabla”
   WHERE release_year < 2000
