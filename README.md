@@ -33,6 +33,7 @@ Link: https://www.kaggle.com/datasets/shivamb/netflix-shows/data
 - Tienes que nombrar tu tabla, después escoger la opción de crear una base de datos. Luego en conjunto de datos seleccionar el bucket “datos-lab-athena” que es donde se encuentran los datos para hacer las consultas en Athena 
 - En formato de datos seleccionar tipo de tabla “Apache Hive” y formato de archivo “CSV”
 - En los detalles de columna debes nombrar todas las columnas de los datos. Puedes agregarlas de una. Ó seleccionar “Agregar columnas en bloque” y ahí escribir todas en modo <“nombre” + “tipo”,>
+
 **Ejemplo:** con el dataset de netflix_series se debe colocar: “show_id string, type string, title string, director string, cast string” y así detallar con todas el nombre de las columnas y el tipo
 - Finalmente debes seleccionar “Crear tabla”
 
