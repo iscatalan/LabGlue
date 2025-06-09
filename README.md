@@ -98,7 +98,9 @@ Link: https://www.kaggle.com/datasets/shivamb/netflix-shows/data
   WHERE title LIKE '%Love%';
 
 
+
 - Para eliminar la tabla se utiliza el comando DROP TABLE “nombre tabla”. En el caso de querer eliminar la base de datos se usa DROP DATABASE “nombre base de datos”
+
   
 
 **¡Felicidades, has completado el laboratorio!**
