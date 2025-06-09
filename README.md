@@ -52,12 +52,15 @@ Link: https://www.kaggle.com/datasets/shivamb/netflix-shows/data
   WHERE release_year < 2000
 
   **2. ¿Cuántos títulos hay en total en la tabla?**
+
   *Respuesta:*
   
   SELECT COUNT(*) FROM “nombre_tabla”;
 
   **3.¿Qué títulos fueron lanzados en el año 2021?**
-  *Respuesta:*
+
+   *Respuesta:*
+
   SELECT title, release_year
   
   FROM “nombre_tabla”
@@ -65,7 +68,9 @@ Link: https://www.kaggle.com/datasets/shivamb/netflix-shows/data
   WHERE release_year = 2021;
 
   **4. Listar todos los títulos del país 'United States'**
-  *Respuesta:*
+
+   *Respuesta:*
+
   SELECT title, country
   
   FROM “nombre_tabla”
@@ -73,16 +78,20 @@ Link: https://www.kaggle.com/datasets/shivamb/netflix-shows/data
   WHERE country = 'United States';
 
   **5. ¿Cuántos títulos son películas (Movie) y cuántos son series (TV Show)?**
+
   *Respuesta:*
-  SELECT type, COUNT(*)
+
+   SELECT type, COUNT(*)
   
   FROM “nombre_tabla”
   
   GROUP BY type;
 
   **6. ¿Qué títulos tienen la palabra "Love"?**
-  *Respuesta:*
-  SELECT title
+
+   *Respuesta:*
+
+   SELECT title
   
   FROM “nombre_tabla”
   
