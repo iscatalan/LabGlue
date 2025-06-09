@@ -34,7 +34,7 @@ Link: https://www.kaggle.com/datasets/shivamb/netflix-shows/data
 - En formato de datos seleccionar tipo de tabla “Apache Hive” y formato de archivo “CSV”
 - En los detalles de columna debes nombrar todas las columnas de los datos. Puedes agregarlas de una. Ó seleccionar “Agregar columnas en bloque” y ahí escribir todas en modo <“nombre” + “tipo”,>
 
-**Ejemplo:** con el dataset de netflix_series se debe colocar: “show_id string, type string, title string, director string, cast string” y así detallar con todas el nombre de las columnas y el tipo
+  **Ejemplo:** con el dataset de netflix_series se debe colocar: “show_id string, type string, title string, director string, cast string” y así detallar con todas el nombre de las columnas y el tipo
 - Finalmente debes seleccionar “Crear tabla”
 
 **Tarea 6: Realizar consultas de tipo SQL en Athena**
