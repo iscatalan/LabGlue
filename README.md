@@ -40,39 +40,40 @@ Link: https://www.kaggle.com/datasets/shivamb/netflix-shows/data
 **Tarea 6: Realizar consultas de tipo SQL en Athena**
 - Al costado derecho, donde dice “Datos” elige la base de datos que creaste en la tarea 5 y también debes escoger la tabla a la que se harán las consultas
 - Ya configurado lo anterior puedes comenzar a realizar consultas SQL y responder a las siguientes preguntas:
-**1.¿Qué títulos fueron lanzados antes del año 2000?** Para responder esto se necesita seleccionar (SELECT) las columnas title y release_year, que tienen el nombre del título y el año en que fue lanzado. Luego     indicar de qué tabla se obtendrá esta información utilizando FROM “nombre tabla”. Y, por último aplicar una condición con WHERE para filtrar los resultados y mostrar solo los que en release_year sea menor al      año 2000
-*Respuesta:*
-SELECT title, release_year
-FROM “nombre tabla”
-WHERE release_year < 2000
+  
+  **1.¿Qué títulos fueron lanzados antes del año 2000?** Para responder esto se necesita seleccionar (SELECT) las columnas title y release_year, que tienen el nombre del título y el año en que fue lanzado. Luego     indicar de qué tabla se obtendrá esta información utilizando FROM “nombre tabla”. Y, por último aplicar una condición con WHERE para filtrar los resultados y mostrar solo los que en release_year sea menor al      año 2000
+  *Respuesta:*
+  SELECT title, release_year
+  FROM “nombre tabla”
+  WHERE release_year < 2000
 
-**2. ¿Cuántos títulos hay en total en la tabla?**
-*Respuesta:*
-SELECT COUNT(*) FROM “nombre_tabla”;
+  **2. ¿Cuántos títulos hay en total en la tabla?**
+  *Respuesta:*
+  SELECT COUNT(*) FROM “nombre_tabla”;
 
-**3.¿Qué títulos fueron lanzados en el año 2021?**
-*Respuesta:*
-SELECT title, release_year 
-FROM “nombre_tabla”
-WHERE release_year = 2021;
+  **3.¿Qué títulos fueron lanzados en el año 2021?**
+  *Respuesta:*
+  SELECT title, release_year 
+  FROM “nombre_tabla”
+  WHERE release_year = 2021;
 
-**4. Listar todos los títulos del país 'United States'**
-*Respuesta:*
-SELECT title, country 
-FROM “nombre_tabla”
-WHERE country = 'United States';
+  **4. Listar todos los títulos del país 'United States'**
+  *Respuesta:*
+  SELECT title, country 
+  FROM “nombre_tabla”
+  WHERE country = 'United States';
 
-**5. ¿Cuántos títulos son películas (Movie) y cuántos son series (TV Show)?**
-*Respuesta:*
-SELECT type, COUNT(*) 
-FROM “nombre_tabla” 
-GROUP BY type;
+  **5. ¿Cuántos títulos son películas (Movie) y cuántos son series (TV Show)?**
+  *Respuesta:*
+  SELECT type, COUNT(*) 
+  FROM “nombre_tabla” 
+  GROUP BY type;
 
-**6. ¿Qué títulos tienen la palabra "Love"?**
-*Respuesta:*
-SELECT title 
-FROM “nombre_tabla”
-WHERE title LIKE '%Love%';
+  **6. ¿Qué títulos tienen la palabra "Love"?**
+  *Respuesta:*
+  SELECT title 
+  FROM “nombre_tabla”
+  WHERE title LIKE '%Love%';
 
 
 - Para eliminar la tabla se utiliza el comando DROP TABLE “nombre tabla”. En el caso de querer eliminar la base de datos se usa DROP DATABASE “nombre base de datos”
