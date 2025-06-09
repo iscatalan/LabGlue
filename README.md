@@ -15,40 +15,70 @@ Athena es un servicio de consulta que permite analizar datos directamente desde 
 
 Link: https://www.kaggle.com/datasets/shivamb/netflix-shows/data
 
-**Tarea 2: Crear una nueva función Lambda**
+**Tarea 2: Subir los datos a un bucket S3**
 
-- En Lambda, crea una nueva función y tienes que elegir “runtime” en Python
-- Importante revisar que el rol IAM “LambdaExecutionRole” esté asociado a la función
-- Ya creada la función, en la parte del código hay uno preconfigurado. Debes cambiarlo y colocar uno que tenga un flujo de POST y GET más una conexión con DynamoDB
-- Debes probar el código en “Test Event”. Para ello creas un evento nuevo, le pones un nombre e insertas en formato JSON el tipo de solicitud que quieres probar
-- Tienes que realizar el trabajo de probar con GET para ver qué “username” tienen contraseña en la tabla “Usuarios”
-- También, trabajar con POST para comenzar a rellenar la tabla “UsuariosNuevos”. Puede ser username, password, país, según los atributos que quieras
+- Debes ir a S3 y buscar el bucket llamado “datos-lab-athena”. Luego seleccionar “Cargar” para subir tu archivo con los datos 
 
-**Tarea 3: Crear API Gateway**
-- Debes ir a API Gateway y crear una API HTTP con el nombre que desees 
-- Para tu API creada tienes que configurar rutas para GET y POST
-- Tienes que integrar las rutas a la función de Lambda que ya creaste en el laboratorio. Debes realizarlo a través de “Manage integrations” y en configuraciones avanzadas cambiar el payload a 1.0 para mayor compatibilidad
-- Debes ir a “Stages” configurado por default en la creación de la API. Ahí encontrarás el invoke URL para realizar tus pruebas
+**Tarea 3: Crear un bucket para guardar los resultados de las consultas de Athena**
+- Tienes que crear un bucket de uso general, nombrarlo y mantener la configuración de bloqueo de acceso público ya configurada
 
-**Tarea 4: Probar API en el navegador y CloudShell**
+**Tarea 4: Configurar la ubicación de los resultados de las consultas en Athena**
  
-- Para probar en GET en el navegador utiliza → invoke URL + /ruta GET + ?username=  &lt;username&gt; (sacado de tabla “Usuarios”)
-- En el caso de POST, debes probarlo en el CloudShell del Management Console con los siguientes comandos:
-```bash~
-curl -X POST \
- invoke URL + /ruta POST \ 
- -H "Content-Type: application/json" \
- -d '{"username":"<nombre>", "<atributo que quieras agregar ": "<value>", “<atributo que quieras agregar>": "<value>"}'  
-  + (los que quieras agregar) 
- 
-Ejemplo:   -d '{"username":"Hugo", "país":"Chile", "password":"1234"}' 
-```
+- Debes ir a Athena, escoger “Iniciar el editor de consultas” con la opción “Consulte sus datos con Trino SQL” seleccionada. Esto permitirá analizar los datos que tienes en el bucket S3
+- Antes de crear la tabla, debes configurar la ubicación de los resultados de la consulta a S3. Entonces, lo anterior debes conectarlo al bucket que creaste en la tarea 3. Para ello debes seleccionar “Editar ajustes” que aparece en la notificación “Antes de ejecutar la primera…” y seleccionar el bucket
 
-**(Opcional) Tarea 5: Probar el flujo de API con Postman**
+**Tarea 5: Crear tabla en Athena**
 
-- Instala Postman si es que no lo tienes, es un programa útil para el trabajo con APIs
-- Luego, en API Gateway busca la URL base para Postman que está conformada por el Invoke URL del stage + /(nombre de ruta GET o Post) 
-- Para el caso de GET pones el URL en Postman y lo manejas desde “Params” con “username” y value 
-- Para POST utilizas el mismo URL, cambias la ruta y te diriges a body en que llenas los datos que deseas insertar en modo JSON. 
+- Debes seleccionar crear en donde dice “Tablas y vistas”, luego en la opción de origen de datos tiene que ser la de datos del bucket S3
+- Tienes que nombrar tu tabla, después escoger la opción de crear una base de datos. Luego en conjunto de datos seleccionar el bucket “datos-lab-athena” que es donde se encuentran los datos para hacer las consultas en Athena 
+- En formato de datos seleccionar tipo de tabla “Apache Hive” y formato de archivo “CSV”
+- En los detalles de columna debes nombrar todas las columnas de los datos. Puedes agregarlas de una. Ó seleccionar “Agregar columnas en bloque” y ahí escribir todas en modo <“nombre” + “tipo”,>
+**Ejemplo:** con el dataset de netflix_series se debe colocar: “show_id string, type string, title string, director string, cast string” y así detallar con todas el nombre de las columnas y el tipo
+- Finalmente debes seleccionar “Crear tabla”
+
+**Tarea 6: Realizar consultas de tipo SQL en Athena**
+- Al costado derecho, donde dice “Datos” elige la base de datos que creaste en la tarea 5 y también debes escoger la tabla a la que se harán las consultas
+- Ya configurado lo anterior puedes comenzar a realizar consultas SQL y responder a las siguientes preguntas:
+**1.¿Qué títulos fueron lanzados antes del año 2000?** Para responder esto se necesita seleccionar (SELECT) las columnas title y release_year, que tienen el nombre del título y el año en que fue lanzado. Luego     indicar de qué tabla se obtendrá esta información utilizando FROM “nombre tabla”. Y, por último aplicar una condición con WHERE para filtrar los resultados y mostrar solo los que en release_year sea menor al      año 2000
+*Respuesta:*
+SELECT title, release_year
+FROM “nombre tabla”
+WHERE release_year < 2000
+
+**2. ¿Cuántos títulos hay en total en la tabla?**
+*Respuesta:*
+SELECT COUNT(*) FROM “nombre_tabla”;
+
+**3.¿Qué títulos fueron lanzados en el año 2021?**
+*Respuesta:*
+SELECT title, release_year 
+FROM “nombre_tabla”
+WHERE release_year = 2021;
+
+**4. Listar todos los títulos del país 'United States'**
+*Respuesta:*
+SELECT title, country 
+FROM “nombre_tabla”
+WHERE country = 'United States';
+
+**5. ¿Cuántos títulos son películas (Movie) y cuántos son series (TV Show)?**
+*Respuesta:*
+SELECT type, COUNT(*) 
+FROM “nombre_tabla” 
+GROUP BY type;
+
+**6. ¿Qué títulos tienen la palabra "Love"?**
+*Respuesta:*
+SELECT title 
+FROM “nombre_tabla”
+WHERE title LIKE '%Love%';
+
+
+- Para eliminar la tabla se utiliza el comando DROP TABLE “nombre tabla”. En el caso de querer eliminar la base de datos se usa DROP DATABASE “nombre base de datos”
+  
 
 **¡Felicidades, has completado el laboratorio!**
+
+
+
+
