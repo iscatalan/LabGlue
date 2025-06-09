@@ -1,7 +1,8 @@
 ## Laboratorio Athena Quest
 
 
-**Objetivo General:**  Aprender a usar los servicios de almacenamiento y análisis de datos en AWS, ya sea Amazon S3 y Amazon Athena para guardar datos y realizar consultas SQL que permitan explorar y analizar información
+**Objetivo General:**  Aprender a usar los servicios de almacenamiento y análisis de datos en AWS, ya sea Amazon S3 y Amazon Athena para guardar datos y realizar consultas SQL que permitan explorar y analizar información 
+
 ![Arquitectura AWS](https://github.com/iscatalan/AthenaQuest/blob/main/Arquitectura%20Athena%20Quest%20(1).png)
 
 **Introducción:**  S3 (Simple Storage Service) es un servicio de almacenamiento que permite guardar objetos de forma segura y escalable. La información se organiza en buckets y cada uno debe tener un nombre único a nivel global, es decir, no puede repetirse en ninguna otra cuenta de AWS del mundo. Además, por seguridad los buckets deben estar configurados para bloquear el acceso público, a menos que haya una necesidad muy específica. Esto evita que los datos sean visibles para cualquier persona y protege la privacidad de la información. 
@@ -11,6 +12,7 @@ Athena es un servicio de consulta que permite analizar datos directamente desde 
 **Tarea 1: Extraer los datos para el trabajo del laboratorio**
 
 - Debes descargar el dataset netflix_titles.csv con temática de películas en Kaggle
+
 Link: https://www.kaggle.com/datasets/shivamb/netflix-shows/data
 
 **Tarea 2: Crear una nueva función Lambda**
