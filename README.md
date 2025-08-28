@@ -1,5 +1,4 @@
 
-
 ## Laboratorio Glue
 
 **Objetivo General:**  Aprender a utilizar AWS Glue para construir y ejecutar trabajos ETL que permitan catalogar, transformar y limpiar datos almacenados en S3 y validar los resultados a través de consultas en Athena
@@ -199,16 +198,115 @@ Nuevamente debes ir a "tables" y en este caso seleccionar la nueva tabla que cre
 
 _Al ejecutar queries comparativas, es importante revisar si se eliminaron las columnas innecesarias y cómo se manejaron los valores NULL. En este caso, eliminar los registros con el campo director vacío implicaría perder películas o series completas, lo que afectaría el análisis. Por ello, en la segunda etapa del ETL los valores que aparecían como "Not given" fueron reemplazados por NULL, ya que "Not given" no es un estándar en análisis de datos. Dejar los valores como NULL permite que las herramientas y bases de datos interpreten correctamente la ausencia de información, evita confusiones al tratar "Not given" como un dato válido_
 
-**Desafío: Análisis final de los datos transformados** 
+**Tarea 9: Análisis final de los datos transformados** 
 
 Ya con una buena estructura en los datos, es posible realizar consultas que permitan responder preguntas clave como:
 
+**Contenido**
+
 1) ¿Cuántas películas y series se agregaron cada año?
-2) ¿Qué géneros son los más frecuentes?
-3) ¿Cómo evolucionan las tendencias a lo largo del tiempo?
-4) ¿Qué directores aparecen más veces en el catálogo?
-5) ¿Cómo se distribuyen las películas y series por país?
+  
+  *Respuesta:*
+
+  SELECT 
+  
+  year_added_netflix,
+  
+  type,
+  
+  COUNT(*) as contenido_agregado
+  
+  FROM "AwsDataCatalog"."glue-db-movies"."tabla-netflix-clean"
+  
+  WHERE year_added_netflix IS NOT NULL
+  
+  GROUP BY year_added_netflix, type
+  
+  ORDER BY year_added_netflix asc;
+
+2) ¿Cómo se distribuyen las películas y series por país?
+
+   *Respuesta:*
+
+   SELECT 
+   
+   country,
+   
+   type,
+   
+   COUNT(*) as total
+   
+   FROM "AwsDataCatalog"."glue-db-movies"."tabla-netflix-clean"
+   
+   WHERE country IS NOT NULL
+   
+   GROUP BY country, type
+   
+   ORDER BY total DESC
+
+3) ¿Cuáles son las películas y series clasificadas como comedias?
+
+   *Respuesta:*
+
+   SELECT 
+   
+   title,
+   
+   type,
+   
+   country,
+   
+   release_year,
+   
+   listed_in
+   
+   FROM "glue-db-movies"."tabla-netflix-clean"
+   
+   WHERE listed_in LIKE '%Comedies%'
+   
+   ORDER BY release_year DESC
+
+
+4) ¿Cómo evolucionan las tendencias de producción a lo largo del tiempo usando el año de estreno?
+
+   *Respuesta:*
+
+   SELECT 
+   
+   release_year,
+   
+   type,
+   
+   COUNT(*) AS total
+   
+   FROM "AwsDataCatalog"."glue-db-movies"."tabla-netflix-clean"
+   
+   WHERE release_year IS NOT NULL
+   
+   GROUP BY release_year, type
+   
+   ORDER BY release_year ASC;
+
+
+**DESAFÍO: REALIZAR CONSULTAS Y RESPONDER LAS SIGUIENTES PREGUNTAS:**
+
+**Directores**
+
+5) ¿Qué directores aparecen más veces en el catálogo?
+
+6) ¿Qué directores han producido contenido en Chile?
+
+**Géneros** 
+
+7) ¿Cuáles son los géneros más comunes en el catálogo?
+
+8) ¿Cómo se distribuyen los géneros de películas y series por país?
+
+
+Así, puedes seguir explorando los datos mediante consultas según las preguntas que se te ocurran
+
 
 **¡Felicidades, has completado el laboratorio!**
+
 
 
