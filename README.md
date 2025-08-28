@@ -206,23 +206,23 @@ Ya con una buena estructura en los datos, es posible realizar consultas que perm
 
 1. ¿Cuántas películas y series se agregaron cada año?
   
-  *Respuesta:*
+   *Respuesta:*
 
-  SELECT 
+   SELECT 
   
-  year_added_netflix,
+   year_added_netflix,
   
-  type,
+   type,
   
-  COUNT(*) as contenido_agregado
+   COUNT(*) as contenido_agregado
   
-  FROM "AwsDataCatalog"."glue-db-movies"."tabla-netflix-clean"
+   FROM "AwsDataCatalog"."glue-db-movies"."tabla-netflix-clean"
   
-  WHERE year_added_netflix IS NOT NULL
+   WHERE year_added_netflix IS NOT NULL
   
-  GROUP BY year_added_netflix, type
+   GROUP BY year_added_netflix, type
   
-  ORDER BY year_added_netflix asc;
+   ORDER BY year_added_netflix asc;
 
 2. ¿Cómo se distribuyen las películas y series por país?
 
