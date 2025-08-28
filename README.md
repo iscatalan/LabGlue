@@ -204,7 +204,7 @@ Ya con una buena estructura en los datos, es posible realizar consultas que perm
 
 **Contenido**
 
-1) ¿Cuántas películas y series se agregaron cada año?
+1. ¿Cuántas películas y series se agregaron cada año?
   
   *Respuesta:*
 
@@ -224,7 +224,7 @@ Ya con una buena estructura en los datos, es posible realizar consultas que perm
   
   ORDER BY year_added_netflix asc;
 
-2) ¿Cómo se distribuyen las películas y series por país?
+2. ¿Cómo se distribuyen las películas y series por país?
 
    *Respuesta:*
 
