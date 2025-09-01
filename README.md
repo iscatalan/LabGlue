@@ -13,7 +13,7 @@ Debes descargar los datos "netflix1.csv" del siguiente link:
 
 **Tarea 2: Preparar nuestro entorno de laboratorio creando buckets S3**
 
-Como buena práctica tienes que crear 4 buckets. Esto sirve para que en nuetro flujo ETL haya seguridad y organización de los datos, cada bucket representa una etapa distinta del proceso. 
+Como buena práctica tienes que crear 4 buckets. Esto sirve para que en nuestro flujo ETL haya seguridad y organización de los datos, cada bucket representa una etapa distinta del proceso. 
 
 Entonces como primer paso debes ir a S3 para crear tu primer bucket: 
 
