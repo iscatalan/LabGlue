@@ -47,17 +47,19 @@ En AWS, los permisos entre servicios son fundamentales para que puedan interactu
 Para ello debes ir a IAM y crear un nuevo rol con los siguiente:
 
 1) Crear un nuevo rol y seleccionar Glue como caso de uso
-2) Otorgar al rol la política AmazonS3FullAccess
-3) Entrar al rol creado y agregar una política en modo JSON para otorgar permisos más específicos
-4) La política debe incluir s3:GetObject y s3:PutObject para todos los buckets. Se recomienda repetir la declaración de los buckets dos veces: Con * para que Glue pueda acceder a todos los objetos dentro del bucket. Y sin * para que Glue pueda acceder al bucket en sí, no solo a los objetos internos.
-5) También debe incluir los permisos para que Glue pueda crear nuevas y actualizar las tablas del catálogo de Glue
-
-Tal como los pasos a continuación: 
-
 ![IAM](https://raw.githubusercontent.com/iscatalan/LabGlue/refs/heads/main/LabGlue8.png)
 ![IAM](https://raw.githubusercontent.com/iscatalan/LabGlue/refs/heads/main/LabGlue9.png)
+
+2) Otorgar al rol la política AmazonS3FullAccess
 ![IAM](https://raw.githubusercontent.com/iscatalan/LabGlue/refs/heads/main/LabGlue10.png)
+
+3) Entrar al rol creado y agregar una política en modo JSON para otorgar permisos más específicos
 ![IAM](https://raw.githubusercontent.com/iscatalan/LabGlue/refs/heads/main/LabGlue11.png) 
+
+4) La política debe incluir s3:GetObject y s3:PutObject para todos los buckets. Se recomienda repetir la declaración de los buckets dos veces: Con * para que Glue pueda acceder a todos los objetos dentro del bucket. Y sin * para que Glue pueda acceder al bucket en sí, no solo a los objetos internos.
+
+5) También debe incluir los permisos para que Glue pueda crear nuevas y actualizar las tablas del catálogo de Glue
+
 ![IAM](https://raw.githubusercontent.com/iscatalan/LabGlue/refs/heads/main/LabGlue19.png)
 ![IAM](https://raw.githubusercontent.com/iscatalan/LabGlue/refs/heads/main/LabGlue52.png)
 ![IAM](https://raw.githubusercontent.com/iscatalan/LabGlue/refs/heads/main/LabGlue21.png) 
@@ -357,7 +359,6 @@ Así, puedes seguir explorando los datos mediante consultas según las preguntas
 
 
 **¡Felicidades, has completado el laboratorio!**
-
 
 
 
