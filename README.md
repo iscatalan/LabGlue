@@ -1,3 +1,5 @@
+## Laboratorio Glue
+
 [Ver vídeo guía](https://workshopde-videos-lab.s3.us-east-1.amazonaws.com/Lab_glue.mp4)
 
 **Objetivo General:**  Aprender a utilizar AWS Glue para construir y ejecutar trabajos ETL que permitan catalogar, transformar y limpiar datos almacenados en S3 y validar los resultados a través de consultas en Athena
@@ -123,33 +125,76 @@ Para finalizar pones "Save" y seleccionar "Run" para comenzar a crear nuestra ta
 
 **Tarea 5.2: Seleccionar tabla creada** 
 
-En Data Catalog ve a la sección de tablas y selecciona la opción de "Table Data" y luego "Proceed" para ir a realizar consultas en Athena
+En Data Catalog ve a la sección de tablas y selecciona la opción de "Table Data" y luego "Proceed". Esto es lo que nos va a dirigir al servicio de Athena para hacer nuestras primeras consultas
 ![ETL](https://raw.githubusercontent.com/iscatalan/LabGlue/refs/heads/main/LabGlue34.png)
 
 **Tarea 6: Revisar los resultados del primer ETL Job en Athena** 
 
-Observa que Athena esté correctamente asociada a tu base de datos y tabla
+Observa en el costado izquierdo que Athena esté correctamente asociada a tu base de datos y tabla
 
-1) Configura que la ubicación del resultado de queries a un bucket S3, en este caso el 4to bucket que realizaste
+1) Como es la primera vez que usas Athena, te pedirá elegir un bucket en S3 para guardar los resultados de tus consultas. Entonces Configura que la ubicación del resultado de queries a un bucket S3
 
-2) Luego ejecuta una query para ver el estado de los datos:
+2) Una vez que cargaste la tabla en Athena, el siguiente paso es revisar el estado de los datos. Para eso es importante obtener una muestra de los datos con una query simple:
 SELECT * FROM nombre_tabla LIMIT 60;
 ![ETL](https://raw.githubusercontent.com/iscatalan/LabGlue/refs/heads/main/LabGlue35.png)
 
-3) Al ver los resultados de la consulta podrás identificar qué transformaciones son necesarias para mejorar la calidad de los datos y facilitar el análisis
+Esto te permitirá visualizar las primeras filas y tener una idea de cómo está estructurada la información
+
+3) Al observar la salida, notarás que en algunos campos aparecen valores como “Not Given”, lo que significa que la información no está disponible. En este caso, se aprecia principalmente en los campos director y country
 ![ETL](https://raw.githubusercontent.com/iscatalan/LabGlue/refs/heads/main/LabGlue37.png)
 ![ETL](https://raw.githubusercontent.com/iscatalan/LabGlue/refs/heads/main/LabGlue36.png)
-En este caso se puede analizar que varios del campo "director" poseen datos "Not Given" 
 
-Para examinar los datos, realiza una query para ver el total de datos "Not Given". En este caso la mayoria está en director y country
+
+4) Para dimensionar el problema, puedes contar cuántos registros contienen este valor con la siguiente consulta: 
+SELECT
+
+  COUNT_IF(type = 'Not Given') AS not_given_type,
+
+  COUNT_IF(title = 'Not Given') AS not_given_title,
+
+  COUNT_IF(director = 'Not Given') AS not_given_director,
+
+  COUNT_IF(country = 'Not Given') AS not_given_country,
+
+  COUNT_IF(date_added = 'Not Given') AS not_given_date_added,
+
+  COUNT_IF(release_year = 'Not Given') AS not_given_release_year,
+
+  COUNT_IF(rating = 'Not Given') AS not_given_rating,
+
+  COUNT_IF(duration = 'Not Given') AS not_given_duration,
+
+  COUNT_IF(listed_in = 'Not Given') AS not_given_listed_in
+
+FROM "AwsDataCatalog"."glue-db-movies"."tabla-netflix"; (Adaptar según tus datos)
+
 ![ETL](https://raw.githubusercontent.com/iscatalan/LabGlue/refs/heads/main/LabGlue38.png)
 
-Luego con una query revisa la cantidad de datos duplicados:
+5) Luego con una query revisa la cantidad de datos duplicados:
+
+SELECT *
+
+FROM "AwsDataCatalog"."glue-db-movies"."tabla-netflix"
+
+WHERE title IN (
+
+    SELECT title
+
+    FROM "AwsDataCatalog"."glue-db-movies"."tabla-netflix"
+
+    GROUP BY title
+
+    HAVING COUNT(*) > 1
+
+)
+
+ORDER BY title;
+
 ![ETL](https://raw.githubusercontent.com/iscatalan/LabGlue/refs/heads/main/LabGlue39.png)
 
 _El trabajo con datos no es solo almacenarlos, sino analizarlos de manera crítica a través de consultas (queries). Estas permiten explorar el estado de la información recogida y plantear preguntas como: ¿Debemos conservar todos los datos?, ¿Es necesario transformarlos a otro formato?, ¿O, quizás eliminarlos si no aportan valor, en el caso de datos Null? Este proceso de cuestionamiento es parte esencial de la limpieza y preparación de datos, ya que aporta a que la información resultante sea de calidad y esté lista para un análisis más profundo. No existe una única respuesta “correcta”, la decisión depende del contexto del análisis y del tipo de dato._
 
-4) Sigue explorando los datos mediante queries que consideres relevantes para comprender su estructura, calidad y contenido. En base a estas observaciones, se diseñará el ETL Job 2, aplicando las transformaciones y decisiones necesarias para preparar los datos
+6) Sigue explorando los datos mediante queries que consideres relevantes para comprender su estructura, calidad y contenido. En base a estas observaciones, se diseñará el ETL Job 2, aplicando las transformaciones y decisiones necesarias para preparar los datos
 
 **Tarea 7: ETL Job 2 (Transformaciones)**
 
@@ -171,7 +216,7 @@ Vuelve a ETL jobs y crea uno nuevo, ponle un nombre y prosigue creando la transf
 ![ETL](https://raw.githubusercontent.com/iscatalan/LabGlue/refs/heads/main/LabGlue45.png)
 
 ### [Descarga el script aquí](https://workshop-mo.s3.us-east-1.amazonaws.com/script_glue.py) 
-![ETL](https://raw.githubusercontent.com/iscatalan/LabGlue/refs/heads/main/LabGlue46.png)
+
 
 ¿Qué hace el script anterior? Se encarga de limpiar y estandarizar los datos. Sus principales funciones son:
 
@@ -179,9 +224,13 @@ a) Manejo de valores nulos: convierte campos que contienen "Not given" en valore
 
 b) Transformación de fechas: renombra la columna "date_added" a "date_original" para mantener claridad sobre su contenido, luego crea nuevamente "date_added" convirtiéndola a tipo fecha con formato "M/d/yyyy" para facilitar operaciones temporales, y finalmente extrae solo el año en la columna "year_added_netflix" que ayudaría a analizar tendencias por año de manera rápida y sencilla
 
-6) _En **custom transform** eres libre de agregarle más parámetros, según creas necesarios_. Además, en **transform** debes seleccionar "Select from Collection". Esto es necesario porque el Custom Transform en Glue devuelve un DynamicFrameCollection (un conjunto de datos con varias salidas). Así con esto eliges explícitamente cuál de esos resultados usar en las siguientes etapas, asegurando que se procese el dataset transformado y no el original
+6) _En **custom transform** eres libre de agregarle más parámetros, según creas necesarios_. 
 
-7) Posteriormente, selecciona tu **target**, que en este caso será nuevamente tu bucket en S3, pero esta vez el que fue destinado para almacenar los resultados del ETL 2. Al igual que en el ETL 1, se repiten los mismos pasos de transformación a formato Parquet y almacenamiento en la ruta correspondiente. Debes guardar tu job y luego "Run"
+7) Además, en **transform** debes seleccionar "Select from Collection". Esto es necesario porque el Custom Transform en Glue devuelve un DynamicFrameCollection (un conjunto de datos con varias salidas). Así con esto eliges explícitamente cuál de esos resultados usar en las siguientes etapas, asegurando que se procese el dataset transformado y no el original
+
+![ETL](https://raw.githubusercontent.com/iscatalan/LabGlue/refs/heads/main/LabGlue46.png)
+
+8) Posteriormente, selecciona tu **target**, que en este caso será nuevamente tu bucket en S3, pero esta vez el que fue destinado para almacenar los resultados del ETL 2. Al igual que en el ETL 1, se repiten los mismos pasos de transformación a formato Parquet y almacenamiento en la ruta correspondiente. Debes guardar tu job y luego "Run"
 
 ![ETL](https://raw.githubusercontent.com/iscatalan/LabGlue/refs/heads/main/LabGlue47.png)
 ![ETL](https://raw.githubusercontent.com/iscatalan/LabGlue/refs/heads/main/LabGlue48.png)
@@ -192,7 +241,7 @@ b) Transformación de fechas: renombra la columna "date_added" a "date_original"
 
 **Tarea 8: Validación Final en Athena**
 
-Nuevamente debes ir a "tables" y en este caso seleccionar la nueva tabla que creaste. Luego, ir a Athena y revisar que esté bien configurado
+Nuevamente debes ir a "tables" y en este caso seleccionar la nueva tabla que creaste y apretar "Table Data" y luego "Proceed" lo que te llevará nuevamente a Athena para realizar las consultas 
 
 ![ETL](https://raw.githubusercontent.com/iscatalan/LabGlue/refs/heads/main/LabGlue49.png)
 ![ETL](https://raw.githubusercontent.com/iscatalan/LabGlue/refs/heads/main/LabGlue50.png)
